@@ -1,8 +1,8 @@
 # MikhailGrabovskiy_platform
 MikhailGrabovskiy Platform repository
 
-kube-apiserver восстанавливается системными механизмами
-core-dns реализован как Deployment с параметром replicas: 2
+kube-apiserver восстанавливается системными механизмами.
+core-dns реализован как Deployment с параметром replicas: 2.
 
 - Развернул minikube.
 - Выполнил шаги по проверке кластера.
