@@ -2,6 +2,7 @@
 MikhailGrabovskiy Platform repository
 
 kube-apiserver восстанавливается системными механизмами.
+
 core-dns реализован как Deployment с параметром replicas: 2.
 
 - Развернул minikube.
