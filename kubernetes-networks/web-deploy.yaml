@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: web         # Название нашего объекта Deployment
 spec:
-  replicas: 1     # Начнем с одного пода
+  replicas: 3     # 3 пода
   selector:       # Укажем, какие поды относятся к нашему Deployment:
     matchLabels:  # - это поды с меткой
       app: web    # app и ее значением web
