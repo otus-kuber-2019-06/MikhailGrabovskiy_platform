@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
-  metadata:
-name: web         # Название нашего объекта Deployment
+metadata:
+  name: web         # Название нашего объекта Deployment
 spec:
   replicas: 1     # Начнем с одного пода
   selector:       # Укажем, какие поды относятся к нашему Deployment:
