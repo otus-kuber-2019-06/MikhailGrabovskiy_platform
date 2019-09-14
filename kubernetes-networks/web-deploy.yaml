@@ -9,9 +9,9 @@ spec:
       app: web    # app и ее значением web
   template:       # Теперь зададим шаблон конфигурации пода
     metadata:
-    name: web
-    labels:
-      app: web
+      name: web
+      labels:
+        app: web
   spec:
     containers:
     - name: web
