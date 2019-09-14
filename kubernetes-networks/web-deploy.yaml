@@ -17,9 +17,9 @@ spec:
       - name: web
         image: mikhailgrabovskiy/my_k8s_course:latest
         # --- BEGIN ---
-        readinessProbe: # Добавим проверку готовности
-          httpGet: # веб-сервера отдавать
-            path: /index.html # контент
+        readinessProbe:           # Добавим проверку готовности
+          httpGet:                # веб-сервера отдавать
+            path: /index.html     # контент
             port: 8000
         # --- END ---
         livenessProbe:
