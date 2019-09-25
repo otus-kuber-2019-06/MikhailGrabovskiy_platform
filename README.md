@@ -12,6 +12,7 @@ core-dns реализован как Deployment с параметром replicas
 - Сделал yaml-манифест.
 - С некоторым трудом пробросил порты и получил тестовую страницу.
 
+
 ДЗ №2
 
 Основное ДЗ
@@ -50,6 +51,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 PR checklist:
 [Х] Выставлен label с номером домашнего задания
+
 
 ДЗ №3
 
