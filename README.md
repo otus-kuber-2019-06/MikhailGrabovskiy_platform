@@ -86,13 +86,19 @@ PR checklist:
 
 
 Как запустить проект:
+
 Выполнить вложенные манифесты.
 
 Как проверить работоспособность:
+
 kubectl get statefulsets
+
 kubectl get pods
+
 kubectl get pvc
+
 kubectl get pv
+
 
 PR checklist:
 [Х] Выставлен label с номером домашнего задания
