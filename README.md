@@ -97,3 +97,27 @@ PR checklist:
 PR checklist:
 [Х] Выставлен label с номером домашнего задания
 
+ДЗ №5
+
+Основное ДЗ
+
+В процессе сделано:
+1. Модифицировал конфигурацию кластера для работы со снапшотами
+2. Установил CSI-драйвер
+3. Создал StorageClass для CSI Host Path Driver, PVC и POD
+
+
+Как запустить проект:
+1. Установить драйвер https://github.com/kubernetes-csi/csi-driver-host-path/blob/master/deploy
+2. Применить манифесты:
+- kubectl apply -f 01-csi-storageclass.yaml
+- kubectl apply -f 02-csi-storagepvc.yaml
+- kubectl apply -f 03-csi-storagepod.yaml
+
+Как проверить работоспособность:
+- kubectl get pods
+- kubectl get pvc
+- kubectl get pv
+
+PR checklist:
+[Х] Выставлен label с номером домашнего задания
