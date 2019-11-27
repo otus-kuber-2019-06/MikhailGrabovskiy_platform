@@ -49,9 +49,6 @@ kubectl auth can-i get deployments --as system:serviceaccount:dev:ken
 kubectl auth can-i get deployments --as system:serviceaccount:dev:ken -n dev
 kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
-PR checklist:
-[Х] Выставлен label с номером домашнего задания
-
 
 ДЗ №3
 
@@ -72,8 +69,6 @@ PR checklist:
 Как проверить работоспособность:
 По инструкции в ДЗ.
 
-PR checklist:
-[Х] Выставлен label с номером домашнего задания
 
 ДЗ №4
 
@@ -94,8 +89,6 @@ PR checklist:
 - kubectl get pvc
 - kubectl get pv
 
-PR checklist:
-[Х] Выставлен label с номером домашнего задания
 
 ДЗ №5
 
@@ -119,5 +112,29 @@ PR checklist:
 - kubectl get pvc
 - kubectl get pv
 
-PR checklist:
-[Х] Выставлен label с номером домашнего задания
+
+ДЗ №6
+
+Основное ДЗ
+
+В процессе сделано:
+1. Установил в кластер kubectl debug по инструкции https://github.com/aylei/kubectl-debug
+2. Проверил и исправил версию образа агента для корректной работы команды strace на Web-сервере из ДЗ-1
+3. Установил netperf-operator для диагностики сети между нодами
+
+
+Как запустить проект:
+1. Выполнить инструкцию https://github.com/aylei/kubectl-debug
+2. Применить манифесты:
+- kubectl apply -f ./kit/kit-clusterrole.yaml
+- kubectl apply -f ./kit/kit-serviceaccount.yaml
+- kubectl apply -f ./kit/kit-clusterrolebinding.yaml
+- kubectl apply -f ./kit/netperf-calico-policy.yaml
+- kubectl apply -f ./kit/iptables-tailer.yaml
+
+Как проверить работоспособность:
+- kubectl get events -A
+- kubectl describe pod --selector=app=netperfoperator
+
+
+
