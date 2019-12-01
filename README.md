@@ -166,11 +166,9 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 |  2 | some data-2 |
 +----+-------------+
 
+
 - kubectl get jobs.batch
 
 NAME                         COMPLETIONS   DURATION   AGE
-
 backup-mysql-instance-job    1/1           2s         53s
-
 restore-mysql-instance-job   0/1           7m17s      7m17s
-
