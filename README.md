@@ -158,6 +158,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 - kubectl exec -it mysql-instance-6c76bcf945-mvw7b -- mysql -potuspassword -e "select * from test;" otus-database
 mysql: [Warning] Using a password on the command line interface can be insecure.
+
 +----+-------------+
 | id | name        |
 +----+-------------+
@@ -166,6 +167,10 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------------+
 
 - kubectl get jobs.batch
+
 NAME                         COMPLETIONS   DURATION   AGE
+
 backup-mysql-instance-job    1/1           2s         53s
+
 restore-mysql-instance-job   0/1           7m17s      7m17s
+
