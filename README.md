@@ -137,4 +137,46 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl describe pod --selector=app=netperfoperator
 
 
+ДЗ №7
 
+Основное ДЗ
+
+В процессе сделано:
+1. Сделал Custom Resource definition для MySQL
+2. Создал и заполнил БД тестовыми данными
+3. Проверил работу CR
+
+Как запустить проект:
+- kubectl apply -f service-account.yml
+- kubectl apply -f role.yml
+- kubectl apply -f role-binding.yml
+- kubectl apply -f deploy-operator.yml
+- kubectl apply -f crd.yml
+- kubectl apply -f cr.yml
+
+Как проверить работоспособность:
+
+- kubectl exec -it mysql-instance-6c76bcf945-mvw7b -- mysql -potuspassword -e "select * from test;" otus-database
+mysql: [Warning] Using a password on the command line interface can be insecure.
+
++----+-------------+
+
+| id | name        |
+
++----+-------------+
+
+|  1 | some data   |
+
+|  2 | some data-2 |
+
++----+-------------+
+
+
+
+- kubectl get jobs.batch
+
+NAME                         COMPLETIONS   DURATION   AGE
+
+backup-mysql-instance-job    1/1           2s         53s
+
+restore-mysql-instance-job   0/1           7m17s      7m17s
