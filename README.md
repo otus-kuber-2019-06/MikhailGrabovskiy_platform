@@ -180,3 +180,31 @@ NAME                         COMPLETIONS   DURATION   AGE
 backup-mysql-instance-job    1/1           2s         53s
 
 restore-mysql-instance-job   0/1           7m17s      7m17s
+
+
+ДЗ №10
+
+Основное ДЗ
+
+В процессе сделано:
+1. Установка tiller в namespace cert-manager. 
+Попытка установки helm-chart cert-manager с ошибкой:
+Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is forbidden: User "system:serviceaccount:cert-manager:tiller-cert-manager" cannot create resource "clusterroles" in API group "rbac.authorization.k8s.io" at the cluster scope
+Добавление ClusterIssuer и переинициализация tiller
+Успешная установка cert-manager.
+
+Как запустить проект:
+1. cert-manager
+- kubectl apply -f 1-cert-manager-namespase.yaml	
+- kubectl apply -f 2-cert-manager-service.yaml	
+- kubectl apply -f 3-cert-manager-role.yaml	
+- kubectl apply -f 4-cert-manager-rolebinding.yaml	
+- kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release0.9/deploy/manifests/00-crds.yaml
+- kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
+- kubectl apply -f 5-cert-manager-clusterissuer.yaml
+- helm init --service-account=tiller
+
+
+Как проверить работоспособность:
+1. cert-manager
+kubectl get all -n cert-manager
