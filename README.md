@@ -199,6 +199,7 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 - kubectl apply -f 2-cert-manager-service.yaml	
 - kubectl apply -f 3-cert-manager-role.yaml	
 - kubectl apply -f 4-cert-manager-rolebinding.yaml	
+- helm repo add jetstack https://charts.jetstack.io
 - kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release0.9/deploy/manifests/00-crds.yaml
 - kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
 - kubectl apply -f 5-cert-manager-clusterissuer.yaml
