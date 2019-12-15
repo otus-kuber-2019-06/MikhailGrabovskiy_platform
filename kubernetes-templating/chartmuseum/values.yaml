@@ -214,7 +214,7 @@ ingress:
     kubernetes.io/tls-acme: "true"
     certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
     certmanager.k8s.io/acme-challenge-type: http01
-hosts:
+  hosts:
   - name: chartmuseum.35.223.243.232.nip.io
     path: /
     tls: true
