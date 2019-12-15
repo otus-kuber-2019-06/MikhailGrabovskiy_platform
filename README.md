@@ -212,6 +212,9 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 helm tiller run helm upgrade --install chartmuseum stable/chartmuseum --wait --namespace=chartmuseum --version=2.3.2 -f c:/k8s/hw10/chartmuseum/values.yaml
 
 3. harbor
+- kubectl apply -f harbor-namespase.yaml	
+- helm install harbor harbor/harbor --wait --namespace=harbor --version=1.1.2 -f c:/k8s/hw10/harbor/values.yaml
+
 
 Как проверить работоспособность:
 1. cert-manager
@@ -221,3 +224,4 @@ kubectl get all -n cert-manager
 https://chartmuseum.35.223.243.232.nip.io/
 
 3. harbor
+https://harbor.35.223.243.232.nip.io/
