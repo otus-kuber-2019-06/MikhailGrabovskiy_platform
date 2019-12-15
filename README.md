@@ -192,6 +192,8 @@ restore-mysql-instance-job   0/1           7m17s      7m17s
 Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is forbidden: User "system:serviceaccount:cert-manager:tiller-cert-manager" cannot create resource "clusterroles" in API group "rbac.authorization.k8s.io" at the cluster scope
 Добавление ClusterIssuer и переинициализация tiller
 Успешная установка cert-manager.
+2. Установка chartmuseum с включенным ingress ресурсом в файле values.yaml
+3. Установка harbor с использованием helm 3
 
 Как запустить проект:
 1. cert-manager
@@ -206,7 +208,16 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 - helm init --service-account=tiller
 - helm upgrade --install cert-manager jetstack/cert-manager --wait --namespace=cert-manager --version=0.9.0 --tiller-namespace cert-manager --atomic
 
+2. chartmuseum
+helm tiller run helm upgrade --install chartmuseum stable/chartmuseum --wait --namespace=chartmuseum --version=2.3.2 -f c:/k8s/hw10/chartmuseum/values.yaml
+
+3. harbor
 
 Как проверить работоспособность:
 1. cert-manager
 kubectl get all -n cert-manager
+
+2. chartmuseum
+https://chartmuseum.35.223.243.232.nip.io/
+
+3. harbor
