@@ -204,6 +204,7 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 - kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
 - kubectl apply -f 5-cert-manager-clusterissuer.yaml
 - helm init --service-account=tiller
+- helm upgrade --install cert-manager jetstack/cert-manager --wait --namespace=cert-manager --version=0.9.0 --tiller-namespace cert-manager --atomic
 
 
 Как проверить работоспособность:
