@@ -195,6 +195,8 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 2. Установка chartmuseum с включенным ingress ресурсом в файле values.yaml
 3. Установка harbor с использованием helm 3
 4. Разделение на два релиза, параметризация и установка с зависимостями демо-приложения Socks shop.
+5. Шаблонизация сервисов service и deployment с использованием Kubecfg
+
 
 Как запустить проект:
 1. cert-manager
@@ -219,6 +221,10 @@ helm tiller run helm upgrade --install chartmuseum stable/chartmuseum --wait --n
 4. Socks shop
 helm upgrade --install socks-shop kubernetes-templating/socks-shop --namespace socks-shop
 
+5. Kubecfg
+kubecfg update kubecfg/services.jsonnet --namespace socks-shop
+
+
 Как проверить работоспособность:
 1. cert-manager
 kubectl get all -n cert-manager
@@ -232,3 +238,5 @@ https://harbor.35.223.243.232.nip.io/
 4. Socks shop
 https://socks-shop.35.223.243.232.nip.io/
 
+5. Kubecfg
+kubecfg show kubecfg/services.jsonnet
