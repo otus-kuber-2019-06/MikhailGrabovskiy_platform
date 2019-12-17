@@ -196,7 +196,7 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 3. Установка harbor с использованием helm 3
 4. Разделение на два релиза, параметризация и установка с зависимостями демо-приложения Socks shop.
 5. Шаблонизация сервисов service и deployment с использованием Kubecfg
-
+6. Параметризация микросервиса Card при помощи Kustomize для запуска в разных Namespace с префиксами и лейблами.
 
 Как запустить проект:
 1. cert-manager
@@ -224,6 +224,10 @@ helm upgrade --install socks-shop kubernetes-templating/socks-shop --namespace s
 5. Kubecfg
 kubecfg update kubecfg/services.jsonnet --namespace socks-shop
 
+6. Kustomize
+kubectl apply -k kustomize/overrides/socks-shop
+kubectl create ns socks-shop-prod
+kubectl apply -k kustomize/overrides/socks-shop-prod
 
 Как проверить работоспособность:
 1. cert-manager
@@ -240,3 +244,7 @@ https://socks-shop.35.223.243.232.nip.io/
 
 5. Kubecfg
 kubecfg show kubecfg/services.jsonnet
+
+6. Kustomize
+kubectl get all -n socks-shop
+kubectl get all -n socks-shop-prod
