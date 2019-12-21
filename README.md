@@ -10,7 +10,7 @@ core-dns реализован как Deployment с параметром replicas
 - Выполнил шаги по проверке кластера.
 - Создал докер-образ веб-сервера.
 - Сделал yaml-манифест.
-- С некоторым трудом пробросил порты и получил тестовую страницу.
+- Пробросил порты и получил тестовую страницу.
 
 
 ## ДЗ №2
@@ -477,12 +477,22 @@ token/         token         auth_token_36b4e877         token based credentials
 - kubectl run --generator=run-pod/v1 tmp --rm -i --tty --serviceaccount=vault-auth --image alpine:3.7
 - apk add curl jq
 
-<pre>VAULT_ADDR=http://vault:8200
-KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-curl --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "otus"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq
-TOKEN=$(curl -k -s --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "test"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq '.auth.client_token' | awk -F\" '{print $2}')</pre>
+Залогинимся и получим клиентский токен: s.hMtSCm3bFKwTAbF8Y8j04qtS
+- VAULT_ADDR=http://vault:8200
+- KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+- curl --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "otus"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq
+- TOKEN=$(curl -k -s --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "test"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq '.auth.client_token' | awk -F\" '{print $2}')
 
+Проверка чтения:
+- curl --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-ro/config
+- curl --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-rw/config
 
+Проверка записи:
+- curl --request POST --data '{"bar": "baz"}' --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-ro/config
+<pre><code>"errors":["1 error occurred:\n\t* permission denied\n\n"]</code></pre>
+- curl --request POST --data '{"bar": "baz"}' --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-rw/config
+<pre><code>"errors":["1 error occurred:\n\t* permission denied\n\n"]</code></pre>
+- curl --request POST --data '{"bar": "baz"}' --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-rw/config1
 
 ### Как запустить проект:
 1. 
