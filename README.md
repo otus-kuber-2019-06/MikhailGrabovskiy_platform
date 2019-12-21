@@ -322,7 +322,22 @@ Your release is named vault. To learn more about the release, try:
 
   $ helm status vault
   $ helm get vault</code></pre>
+kubectl exec -it vault-0 -- vault operator init --key-shares=1 --key-threshold=1
+<pre><code>Unseal Key 1: 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
 
+Initial Root Token: s.q2lblFMzwTNUoVXbdzartXQ2
+
+Vault initialized with 1 key shares and a key threshold of 1. Please securely
+distribute the key shares printed above. When the Vault is re-sealed,
+restarted, or stopped, you must supply at least 1 of these keys to unseal it
+before it can start servicing requests.
+
+Vault does not store the generated master key. Without at least 1 key to
+reconstruct the master key, Vault will remain permanently sealed!
+
+It is possible to generate new unseal keys, provided you have a quorum of
+existing unseal keys shares. See "vault operator rekey" for more information.
+</code></pre>
 
 
 ### Как запустить проект:
