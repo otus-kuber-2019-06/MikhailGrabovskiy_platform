@@ -158,12 +158,14 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl exec -it mysql-instance-6c76bcf945-mvw7b -- mysql -potuspassword -e "select * from test;" otus-database
 mysql: [Warning] Using a password on the command line interface can be insecure.
 
-<code>+----+-------------+
+<pre><code>
++----+-------------+
 | id | name        |
 +----+-------------+
 |  1 | some data   |
 |  2 | some data-2 |
-+----+-------------+</code></p>
++----+-------------+
+</code></pre>
 
 
 
