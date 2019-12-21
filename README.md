@@ -533,16 +533,15 @@ metadata:
 - cat usr/share/nginx/html/index.html
 
 <pre><code>
-  &lt;html>
-  &lt;body>
-  &lt;p>Some secrets:</p>
-  &lt;ul>
-  &lt;li>&lt;pre>username: 'otus'&lt;/pre>&lt;/li>
-  &lt;li>&lt;pre>password: 'asajkjkahs'&lt;/pre>&lt;/li>
-  &lt;/ul>
-
-  &lt;/body>
-  &lt;/html>
+  &lt;html&gt;
+  &lt;body&gt;
+  &lt;p&gt;Some secrets:&lt;/p&gt;
+  &lt;ul&gt;
+  &lt;li&gt;&lt;pre&gt;username: 'otus'&lt;/pre&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;pre&gt;password: 'asajkjkahs'&lt;/pre&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/body&gt;
+  &lt;/html&gt;
   </code></pre>
 
 ### Как запустить проект:
