@@ -501,15 +501,15 @@ token/         token         auth_token_36b4e877         token based credentials
 
 - kubectl create configmap example-vault-agent-config --from-file=./vault-guides/identity/vault-agent-k8s-demo/configs-k8s/
 - kubectl get configmap example-vault-agent-config -o yaml
-<pre><code>"apiVersion: v1
+<pre><code>apiVersion: v1
 data:
   consul-template-config.hcl: "vault {\r\n  renew_token = false\r\n  vault_agent_token_file
     = \"/home/vault/.vault-token\"\r\n  retry {\r\n    backoff = \"1s\"\r\n  }\r\n}\r\n\r\ntemplate
     {\r\n  destination = \"/etc/secrets/index.html\"\r\n  contents = <<EOH\r\n  <html>\r\n
-    \ <body>\r\n  <p>Some secrets:</p>\r\n  {{- with secret \"otus/otus-ro/config\"
+    \ <body>\r\n  <p>Some secrets:</p>\r\n  {{- with secret \"otus/otus-ro/config\"</code></pre>
     }}\r\n  <ul>\r\n  <li><pre>username: {{ .Data.username }}</pre></li>\r\n  <li><pre>password:
     {{ .Data.password }}</pre></li>\r\n  </ul>\r\n  {{ end }}\r\n  </body>\r\n  </html>\r\n
-    \ EOH\r\n}\r\n"
+<pre><code>    \ EOH\r\n}\r\n"
   vault-agent-config.hcl: "# Uncomment this to have Agent run once (e.g. when running
     as an initContainer)\r\nexit_after_auth = true\r\npid_file = \"/home/vault/pidfile\"\r\n\r\nauto_auth
     {\r\n    method \"kubernetes\" {\r\n        mount_path = \"auth/kubernetes\"\r\n
@@ -523,7 +523,7 @@ metadata:
   namespace: default
   resourceVersion: "2798685"
   selfLink: /api/v1/namespaces/default/configmaps/example-vault-agent-config
-  uid: cccd8988-2435-11ea-be7f-42010a8000b3"</code></pre>
+  uid: cccd8988-2435-11ea-be7f-42010a8000b3</code></pre>
 - kubectl apply -f vault-guides/identity/vault-agent-k8s-demo/example-k8s-spec.yml --record
 
 
