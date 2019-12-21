@@ -337,9 +337,10 @@ reconstruct the master key, Vault will remain permanently sealed!
 
 It is possible to generate new unseal keys, provided you have a quorum of
 existing unseal keys shares. See "vault operator rekey" for more information.</code></pre>
-kubectl exec -it vault-0 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
-kubectl exec -it vault-1 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
-kubectl exec -it vault-2 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
+
+- kubectl exec -it vault-0 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
+- kubectl exec -it vault-1 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
+- kubectl exec -it vault-2 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
 
 helm status vault:
 <pre><code>LAST DEPLOYED: Sat Dec 21 15:41:41 2019
