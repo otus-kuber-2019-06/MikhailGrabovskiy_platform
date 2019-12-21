@@ -456,6 +456,22 @@ username    'otus'</code></pre>
 kubernetes/    kubernetes    auth_kubernetes_d1ffdd23    n/a
 token/         token         auth_token_36b4e877         token based credentials</code></pre>
 
+- kubectl create serviceaccount vault-auth
+- kubectl apply --filename hw11/vault-auth-service-account.yml
+
+- export VAULT_SA_NAME=$(kubectl get sa vault-auth -o jsonpath="{.secrets[*]['name']}")
+- export SA_JWT_TOKEN=$(kubectl get secret $VAULT_SA_NAME -o jsonpath="{.data.token}" | base64 --decode; echo)
+- export SA_CA_CRT=$(kubectl get secret $VAULT_SA_NAME -o jsonpath="{.data['ca\.crt']}" | base64 --decode; echo)
+- export K8S_HOST=$(more ~/.kube/config | grep server |awk '/http/ {print $NF}')
+
+- ### alternative way
+- export K8S_HOST=$(kubectl cluster-info | grep ‘Kubernetes master’ | awk ‘/https/ {print $NF}’ | sed ’s/\x1b\[[0-9;]*m//g’ )
+
+Цель конструкции sed ’s/\x1b\[[0-9;]*m//g’ -  removing ANSI color codes from text stream
+
+- kubectl cp otus-policy.hcl vault-0:./tmp
+- kubectl exec -it vault-0 -- vault policy write otus-policy /tmp/otus-policy.hcl
+- kubectl exec -it vault-0 -- vault write auth/kubernetes/role/otus bound_service_account_names=vault-auth bound_service_account_namespaces=default policies=otus-policy ttl=24h
 
 
 ### Как запустить проект:
