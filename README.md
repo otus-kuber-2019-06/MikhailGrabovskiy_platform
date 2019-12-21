@@ -434,11 +434,23 @@ kubectl exec -it vault-0 -- vault auth list
 ----      ----     --------               -----------
 token/    token    auth_token_36b4e877    token based credentials</code></pre>
 
-
+- kubectl exec -it vault-0 -- vault secrets enable --path=otus kv
+- kubectl exec -it vault-0 -- vault secrets list --detailed
+- kubectl exec -it vault-0 -- vault kv put otus/otus-ro/config username='otus' password='asajkjkahs'
+- kubectl exec -it vault-0 -- vault kv put otus/otus-rw/config username='otus' password='asajkjkahs'
+- kubectl exec -it vault-0 -- vault read otus/otus-ro/config
+<pre><code>Key                 Value
+---                 -----
+refresh_interval    768h
+username            'otus'</code></pre>
+- kubectl exec -it vault-0 -- vault kv get otus/otus-rw/config
+<pre><code>====== Data ======
+Key         Value
+---         -----
+username    'otus'</code></pre>
 
 ### Как запустить проект:
 1. 
-
 <pre><code>
 </code></pre>
 
