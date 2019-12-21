@@ -180,3 +180,71 @@ NAME                         COMPLETIONS   DURATION   AGE
 backup-mysql-instance-job    1/1           2s         53s
 
 restore-mysql-instance-job   0/1           7m17s      7m17s
+
+
+##ДЗ №10
+
+Основное ДЗ
+
+В процессе сделано:
+1. Установка tiller в namespace cert-manager. 
+Попытка установки helm-chart cert-manager с ошибкой:
+Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is forbidden: User "system:serviceaccount:cert-manager:tiller-cert-manager" cannot create resource "clusterroles" in API group "rbac.authorization.k8s.io" at the cluster scope
+Добавление ClusterIssuer и переинициализация tiller
+Успешная установка cert-manager.
+2. Установка chartmuseum с включенным ingress ресурсом в файле values.yaml
+3. Установка harbor с использованием helm 3
+4. Разделение на два релиза, параметризация и установка с зависимостями демо-приложения Socks shop.
+5. Шаблонизация сервисов service и deployment с использованием Kubecfg
+6. Параметризация микросервиса Card при помощи Kustomize для запуска в разных Namespace с префиксами и лейблами.
+
+Как запустить проект:
+1. cert-manager
+- kubectl apply -f 1-cert-manager-namespase.yaml	
+- kubectl apply -f 2-cert-manager-service.yaml	
+- kubectl apply -f 3-cert-manager-role.yaml	
+- kubectl apply -f 4-cert-manager-rolebinding.yaml	
+- helm repo add jetstack https://charts.jetstack.io
+- kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release0.9/deploy/manifests/00-crds.yaml
+- kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
+- kubectl apply -f 5-cert-manager-clusterissuer.yaml
+- helm init --service-account=tiller
+- helm upgrade --install cert-manager jetstack/cert-manager --wait --namespace=cert-manager --version=0.9.0 --tiller-namespace cert-manager --atomic
+
+2. chartmuseum
+helm tiller run helm upgrade --install chartmuseum stable/chartmuseum --wait --namespace=chartmuseum --version=2.3.2 -f c:/k8s/hw10/chartmuseum/values.yaml
+
+3. harbor
+- kubectl apply -f harbor-namespase.yaml	
+- helm install harbor harbor/harbor --wait --namespace=harbor --version=1.1.2 -f c:/k8s/hw10/harbor/values.yaml
+
+4. Socks shop
+helm upgrade --install socks-shop kubernetes-templating/socks-shop --namespace socks-shop
+
+5. Kubecfg
+kubecfg update kubecfg/services.jsonnet --namespace socks-shop
+
+6. Kustomize
+kubectl apply -k kustomize/overrides/socks-shop
+kubectl create ns socks-shop-prod
+kubectl apply -k kustomize/overrides/socks-shop-prod
+
+Как проверить работоспособность:
+1. cert-manager
+kubectl get all -n cert-manager
+
+2. chartmuseum
+https://chartmuseum.35.223.243.232.nip.io/
+
+3. harbor
+https://harbor.35.223.243.232.nip.io/
+
+4. Socks shop
+https://socks-shop.35.223.243.232.nip.io/
+
+5. Kubecfg
+kubecfg show kubecfg/services.jsonnet
+
+6. Kustomize
+kubectl get all -n socks-shop
+kubectl get all -n socks-shop-prod
