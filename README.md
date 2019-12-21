@@ -1,7 +1,7 @@
 # MikhailGrabovskiy_platform
 MikhailGrabovskiy Platform repository
 
-ДЗ №1
+## ДЗ №1
 
 kube-apiserver восстанавливается системными механизмами.
 core-dns реализован как Deployment с параметром replicas: 2.
@@ -13,7 +13,7 @@ core-dns реализован как Deployment с параметром replicas
 - С некоторым трудом пробросил порты и получил тестовую страницу.
 
 
-ДЗ №2
+## ДЗ №2
 
 Основное ДЗ
 
@@ -50,7 +50,7 @@ kubectl auth can-i get deployments --as system:serviceaccount:dev:ken -n dev
 kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 
-ДЗ №3
+## ДЗ №3
 
 Основное ДЗ
 ДЗ со звездочкой не выполнял.
@@ -70,7 +70,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 По инструкции в ДЗ.
 
 
-ДЗ №4
+## ДЗ №4
 
 Основное ДЗ
 
@@ -90,7 +90,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl get pv
 
 
-ДЗ №5
+## ДЗ №5
 
 Основное ДЗ
 
@@ -113,7 +113,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl get pv
 
 
-ДЗ №6
+## ДЗ №6
 
 Основное ДЗ
 
@@ -137,7 +137,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl describe pod --selector=app=netperfoperator
 
 
-ДЗ №7
+## ДЗ №7
 
 Основное ДЗ
 
@@ -248,3 +248,17 @@ kubecfg show kubecfg/services.jsonnet
 6. Kustomize
 kubectl get all -n socks-shop
 kubectl get all -n socks-shop-prod
+
+
+## ДЗ №11
+
+Основное ДЗ
+
+### В процессе сделано:
+1. 
+
+Как запустить проект:
+1. 
+
+Как проверить работоспособность:
+1. 
