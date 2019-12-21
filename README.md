@@ -414,8 +414,33 @@ Your release is named vault. To learn more about the release, try:
   $ helm status vault
   $ helm get vault</code></pre>
 
+kubectl exec -it vault-0 -- vault login s.q2lblFMzwTNUoVXbdzartXQ2
+<pre><code>Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.q2lblFMzwTNUoVXbdzartXQ2
+token_accessor       IqNfkZaW3ocarF4wM1w25STS
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]</code></pre>
+
+kubectl exec -it vault-0 -- vault auth list
+<pre><code>Path      Type     Accessor               Description
+----      ----     --------               -----------
+token/    token    auth_token_36b4e877    token based credentials</code></pre>
+
+
+
 ### Как запустить проект:
 1. 
+
+<pre><code>
+</code></pre>
 
 ### Как проверить работоспособность:
 1. 
