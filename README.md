@@ -182,7 +182,7 @@ backup-mysql-instance-job    1/1           2s         53s
 restore-mysql-instance-job   0/1           7m17s      7m17s
 
 
-##ДЗ №10
+## ДЗ №10
 
 Основное ДЗ
 
