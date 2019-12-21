@@ -507,10 +507,10 @@ token/         token         auth_token_36b4e877         token based credentials
 data:
   consul-template-config.hcl: "vault {\r\n  renew_token = false\r\n  vault_agent_token_file
     = \"/home/vault/.vault-token\"\r\n  retry {\r\n    backoff = \"1s\"\r\n  }\r\n}\r\n\r\ntemplate
-    {\r\n  destination = \"/etc/secrets/index.html\"\r\n  contents = <<EOH\r\n  <html>\r\n
-    \ <body>\r\n  <p>Some secrets:</p>\r\n  {{- with secret \"otus/otus-ro/config\"
-    }}\r\n  <ul>\r\n  <li>&lt;pre>username: {{ .Data.username }}&lt;/pre></li>\r\n  <li>&lt;pre>password:
-    {{ .Data.password }}&lt;/pre></li>\r\n  </ul>\r\n  {{ end }}\r\n  </body>\r\n  </html>\r\n
+    {\r\n  destination = \"/etc/secrets/index.html\"\r\n  contents = <<EOH\r\n  &lt;html>\r\n
+    \ &lt;body>\r\n  &lt;p>Some secrets:&lt;/p>\r\n  {{- with secret \"otus/otus-ro/config\"
+    }}\r\n  &lt;ul>\r\n  &lt;li>&lt;pre>username: {{ .Data.username }}&lt;/pre>&lt;/li>\r\n  &lt;li>&lt;pre>password:
+    {{ .Data.password }}&lt;/pre>&lt;/li>\r\n  &lt;/ul>\r\n  {{ end }}\r\n  &lt;/body>\r\n  &lt;/html>\r\n
     \ EOH\r\n}\r\n"
   vault-agent-config.hcl: "# Uncomment this to have Agent run once (e.g. when running
     as an initContainer)\r\nexit_after_auth = true\r\npid_file = \"/home/vault/pidfile\"\r\n\r\nauto_auth
