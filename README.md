@@ -494,6 +494,11 @@ token/         token         auth_token_36b4e877         token based credentials
 <pre><code>"errors":["1 error occurred:\n\t* permission denied\n\n"]</code></pre>
 - curl --request POST --data '{"bar": "baz"}' --header "X-Vault-Token:s.hMtSCm3bFKwTAbF8Y8j04qtS" $VAULT_ADDR/v1/otus/otus-rw/config1
 
+Секрет config не обновился, т.к. в политике (capabilities) отсутствует update. Если добавить, то получится.
+Секрет config1 успешно создался, т.к. новый
+
+
+
 ### Как запустить проект:
 1. 
 <pre><code>
