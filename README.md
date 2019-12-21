@@ -533,7 +533,7 @@ metadata:
 - cat usr/share/nginx/html/index.html
 
 <pre><code>
-<plaintext>
+<xmp>
   <html>
   <body>
   <p>Some secrets:</p>
@@ -544,7 +544,7 @@ metadata:
 
   </body>
   </html>
-  </plaintext>
+</xmp>
   </code></pre>
 
 ### Как запустить проект:
