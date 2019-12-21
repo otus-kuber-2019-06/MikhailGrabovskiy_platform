@@ -473,6 +473,16 @@ token/         token         auth_token_36b4e877         token based credentials
 - kubectl exec -it vault-0 -- vault policy write otus-policy /tmp/otus-policy.hcl
 - kubectl exec -it vault-0 -- vault write auth/kubernetes/role/otus bound_service_account_names=vault-auth bound_service_account_namespaces=default policies=otus-policy ttl=24h
 
+Создание пода с привязанным сервис аккаунтом и установим туда curl и jq:
+- kubectl run --generator=run-pod/v1 tmp --rm -i --tty --serviceaccount=vault-auth --image alpine:3.7
+- apk add curl jq
+
+<pre>VAULT_ADDR=http://vault:8200
+KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+curl --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "otus"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq
+TOKEN=$(curl -k -s --request POST --data '{"jwt": "'$KUBE_TOKEN'", "role": "test"}' $VAULT_ADDR/v1/auth/kubernetes/login | jq '.auth.client_token' | awk -F\" '{print $2}')</pre>
+
+
 
 ### Как запустить проект:
 1. 
