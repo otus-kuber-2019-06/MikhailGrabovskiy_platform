@@ -449,6 +449,15 @@ Key         Value
 ---         -----
 username    'otus'</code></pre>
 
+- kubectl exec -it vault-0 -- vault auth enable kubernetes
+- kubectl exec -it vault-0 -- vault auth list
+<pre><code>Path           Type          Accessor                    Description
+----           ----          --------                    -----------
+kubernetes/    kubernetes    auth_kubernetes_d1ffdd23    n/a
+token/         token         auth_token_36b4e877         token based credentials</code></pre>
+
+
+
 ### Как запустить проект:
 1. 
 <pre><code>
