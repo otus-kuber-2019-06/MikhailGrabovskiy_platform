@@ -159,15 +159,10 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 mysql: [Warning] Using a password on the command line interface can be insecure.
 
 <code>+----+-------------+
-
 | id | name        |
-
 +----+-------------+
-
 |  1 | some data   |
-
 |  2 | some data-2 |
-
 +----+-------------+</code></p>
 
 
