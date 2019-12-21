@@ -506,10 +506,10 @@ data:
   consul-template-config.hcl: "vault {\r\n  renew_token = false\r\n  vault_agent_token_file
     = \"/home/vault/.vault-token\"\r\n  retry {\r\n    backoff = \"1s\"\r\n  }\r\n}\r\n\r\ntemplate
     {\r\n  destination = \"/etc/secrets/index.html\"\r\n  contents = <<EOH\r\n  <html>\r\n
-    \ <body>\r\n  < p>Some secrets:< /p>\r\n  {{- with secret \"otus/otus-ro/config\"
-    }}\r\n  <ul>\r\n  <li><pre>username: {{ .Data.username }}< /pre></li>\r\n  <li><pre>password:
-    {{ .Data.password }}< /pre></li>\r\n  </ul>\r\n  {{ end }}\r\n  </body>\r\n  </html>\r\n
-    \ EOH\r\n}\r\n"
+    \ <body>\r\n  <p>Some secrets:</p>\r\n  {{- with secret \"otus/otus-ro/config\"</code></pre>
+    }}\r\n  <ul>\r\n  <li><pre>username: {{ .Data.username }}</pre></li>\r\n  <li><pre>password:
+    {{ .Data.password }}</pre></li>\r\n  </ul>\r\n  {{ end }}\r\n  </body>\r\n  </html>\r\n
+<pre><code>    \ EOH\r\n}\r\n"
   vault-agent-config.hcl: "# Uncomment this to have Agent run once (e.g. when running
     as an initContainer)\r\nexit_after_auth = true\r\npid_file = \"/home/vault/pidfile\"\r\n\r\nauto_auth
     {\r\n    method \"kubernetes\" {\r\n        mount_path = \"auth/kubernetes\"\r\n
