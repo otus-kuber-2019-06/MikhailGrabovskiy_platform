@@ -442,11 +442,13 @@ token/    token    auth_token_36b4e877    token based credentials</code></pre>
 <pre><code>Key                 Value
 ---                 -----
 refresh_interval    768h
+password            'asajkjkahs'
 username            'otus'</code></pre>
 - kubectl exec -it vault-0 -- vault kv get otus/otus-rw/config
 <pre><code>====== Data ======
 Key         Value
 ---         -----
+password    'asajkjkahs'
 username    'otus'</code></pre>
 
 - kubectl exec -it vault-0 -- vault auth enable kubernetes
@@ -526,7 +528,20 @@ metadata:
   uid: cccd8988-2435-11ea-be7f-42010a8000b3</code></pre>
 - kubectl apply -f vault-guides/identity/vault-agent-k8s-demo/example-k8s-spec.yml --record
 
+Смотрим файл index.html в контейнере nginx:
+- kubectl exec -it vault-agent-example --container nginx-container sh
+- cat usr/share/nginx/html/index.html
 
+<pre><code>  <html>
+  <body>
+  <p>Some secrets:</p>
+  <ul>
+  <li><pre>username: 'otus'</pre></li>
+  <li><pre>password: 'asajkjkahs'</pre></li>
+  </ul>
+
+  </body>
+  </html></code></pre>
 
 ### Как запустить проект:
 1. 
