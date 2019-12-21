@@ -532,7 +532,8 @@ metadata:
 - kubectl exec -it vault-agent-example --container nginx-container sh
 - cat usr/share/nginx/html/index.html
 
-<pre><code>  <html>
+<pre><code>
+  "<html>
   <body>
   <p>Some secrets:</p>
   <ul>
@@ -541,7 +542,9 @@ metadata:
   </ul>
 
   </body>
-  </html></code></pre>
+  </html>
+  "
+  </code></pre>
 
 ### Как запустить проект:
 1. 
