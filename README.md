@@ -336,9 +336,82 @@ Vault does not store the generated master key. Without at least 1 key to
 reconstruct the master key, Vault will remain permanently sealed!
 
 It is possible to generate new unseal keys, provided you have a quorum of
-existing unseal keys shares. See "vault operator rekey" for more information.
-</code></pre>
+existing unseal keys shares. See "vault operator rekey" for more information.</code></pre>
+kubectl exec -it vault-0 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
+kubectl exec -it vault-1 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
+kubectl exec -it vault-2 -- vault operator unseal 48COdnZGpkDSY/oELBuBzQdcW+loRiT6DssbuvwfBRE=
 
+helm status vault:
+<pre><code>LAST DEPLOYED: Sat Dec 21 15:41:41 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ClusterRole
+NAME                              AGE
+vault-agent-injector-clusterrole  173m
+
+==> v1/ClusterRoleBinding
+NAME                          AGE
+vault-agent-injector-binding  173m
+
+==> v1/ConfigMap
+NAME          AGE
+vault-config  173m
+
+==> v1/Deployment
+NAME                  AGE
+vault-agent-injector  173m
+
+==> v1/Pod(related)
+NAME                                  AGE
+vault-0                               173m
+vault-1                               173m
+vault-2                               173m
+vault-agent-injector-b8c466d88-9lhzh  173m
+
+==> v1/Service
+NAME                      AGE
+vault                     173m
+vault-agent-injector-svc  173m
+vault-ui                  173m
+
+==> v1/ServiceAccount
+NAME                  AGE
+vault                 173m
+vault-agent-injector  173m
+
+==> v1/StatefulSet
+NAME   AGE
+vault  173m
+
+==> v1beta1/ClusterRoleBinding
+NAME                  AGE
+vault-server-binding  173m
+
+==> v1beta1/MutatingWebhookConfiguration
+NAME                      AGE
+vault-agent-injector-cfg  173m
+
+==> v1beta1/PodDisruptionBudget
+NAME   AGE
+vault  173m
+
+
+NOTES:
+
+Thank you for installing HashiCorp Vault!
+
+Now that you have deployed Vault, you should look over the docs on using
+Vault with Kubernetes available here:
+
+https://www.vaultproject.io/docs/
+
+
+Your release is named vault. To learn more about the release, try:
+
+  $ helm status vault
+  $ helm get vault</code></pre>
 
 ### Как запустить проект:
 1. 
