@@ -251,6 +251,80 @@ kubectl get all -n socks-shop-prod
 ### В процессе сделано:
 1. Установлен Consul и Vault в режиме high availability.
 
+helm status vault:
+<pre><code>LAST DEPLOYED: Sat Dec 21 15:41:41 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ClusterRole
+NAME                              AGE
+vault-agent-injector-clusterrole  105s
+
+==> v1/ClusterRoleBinding
+NAME                          AGE
+vault-agent-injector-binding  105s
+
+==> v1/ConfigMap
+NAME          AGE
+vault-config  105s
+
+==> v1/Deployment
+NAME                  AGE
+vault-agent-injector  105s
+
+==> v1/Pod(related)
+NAME                                  AGE
+vault-0                               105s
+vault-1                               105s
+vault-2                               105s
+vault-agent-injector-b8c466d88-9lhzh  105s
+
+==> v1/Service
+NAME                      AGE
+vault                     105s
+vault-agent-injector-svc  105s
+vault-ui                  105s
+
+==> v1/ServiceAccount
+NAME                  AGE
+vault                 105s
+vault-agent-injector  105s
+
+==> v1/StatefulSet
+NAME   AGE
+vault  105s
+
+==> v1beta1/ClusterRoleBinding
+NAME                  AGE
+vault-server-binding  105s
+
+==> v1beta1/MutatingWebhookConfiguration
+NAME                      AGE
+vault-agent-injector-cfg  105s
+
+==> v1beta1/PodDisruptionBudget
+NAME   AGE
+vault  105s
+
+
+NOTES:
+
+Thank you for installing HashiCorp Vault!
+
+Now that you have deployed Vault, you should look over the docs on using
+Vault with Kubernetes available here:
+
+https://www.vaultproject.io/docs/
+
+
+Your release is named vault. To learn more about the release, try:
+
+  $ helm status vault
+  $ helm get vault</code></pre>
+
+
+
 ### Как запустить проект:
 1. 
 
