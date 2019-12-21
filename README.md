@@ -17,7 +17,7 @@ core-dns реализован как Deployment с параметром replicas
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 Задание 1
 Создать Service Account bob, дать ему роль admin в рамках всего кластера
 Создать Service Account dave без доступа к кластеру
@@ -32,10 +32,10 @@ core-dns реализован как Deployment с параметром replicas
 Создать Service Account ken в Namespace dev
 Дать ken роль view в рамках Namespace dev
 
-Как запустить проект:
+### Как запустить проект:
 kubectl apply -f . --recursive
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 kubectl auth can-i get deployments --as system:serviceaccount:default:bob
 kubectl auth can-i get pods --as system:serviceaccount:default:dave
 
@@ -53,9 +53,8 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 ## ДЗ №3
 
 Основное ДЗ
-ДЗ со звездочкой не выполнял.
 
-В процессе сделано:
+### В процессе сделано:
 1. Сделал readiness и liveness проверки пода. Увидел эффекты корректной реализации и варианта с ошибкой.
 2. Сделал Deployment с разным количеством реплик и вариантами роллаута.
 3. Сделал сервис типа ClusterIP, просмотрел цепь сетевых правил.
@@ -63,10 +62,10 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 5. Установил и настроил балансировщик MetalLB. Пробросил маршрут, в браузере получил тестовую страницу с чередованием подов.
 6. Установил и настроил Ingress-контроллер, в браузере получил тестовую страницу с чередованием подов.
 
-Как запустить проект:
+### Как запустить проект:
 Пошагово применять манифесты и делать ручные действия по инструкции в ДЗ.
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 По инструкции в ДЗ.
 
 
@@ -74,16 +73,16 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 1. Установил kind.
 2. Создал в кластере StatefulSet с хранилищем MinIO, PV связалось с PVC.
 3. Создал сервис для доступа к MinIO по 9000 порту.
 
 
-Как запустить проект:
+### Как запустить проект:
 - Выполнить вложенные манифесты.
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 - kubectl get statefulsets
 - kubectl get pods
 - kubectl get pvc
@@ -94,20 +93,20 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 1. Модифицировал конфигурацию кластера для работы со снапшотами
 2. Установил CSI-драйвер
 3. Создал StorageClass для CSI Host Path Driver, PVC и POD
 
 
-Как запустить проект:
+### Как запустить проект:
 1. Установить драйвер https://github.com/kubernetes-csi/csi-driver-host-path/blob/master/deploy
 2. Применить манифесты:
 - kubectl apply -f 01-csi-storageclass.yaml
 - kubectl apply -f 02-csi-storagepvc.yaml
 - kubectl apply -f 03-csi-storagepod.yaml
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 - kubectl get pods
 - kubectl get pvc
 - kubectl get pv
@@ -117,13 +116,13 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 1. Установил в кластер kubectl debug по инструкции https://github.com/aylei/kubectl-debug
 2. Проверил и исправил версию образа агента для корректной работы команды strace на Web-сервере из ДЗ-1
 3. Установил netperf-operator для диагностики сети между нодами
 
 
-Как запустить проект:
+### Как запустить проект:
 1. Выполнить инструкцию https://github.com/aylei/kubectl-debug
 2. Применить манифесты:
 - kubectl apply -f ./kit/kit-clusterrole.yaml
@@ -132,7 +131,7 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl apply -f ./kit/netperf-calico-policy.yaml
 - kubectl apply -f ./kit/iptables-tailer.yaml
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 - kubectl get events -A
 - kubectl describe pod --selector=app=netperfoperator
 
@@ -141,12 +140,12 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 1. Сделал Custom Resource definition для MySQL
 2. Создал и заполнил БД тестовыми данными
 3. Проверил работу CR
 
-Как запустить проект:
+### Как запустить проект:
 - kubectl apply -f service-account.yml
 - kubectl apply -f role.yml
 - kubectl apply -f role-binding.yml
@@ -154,12 +153,12 @@ kubectl auth can-i create deployments --as system:serviceaccount:dev:ken -n dev
 - kubectl apply -f crd.yml
 - kubectl apply -f cr.yml
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 
 - kubectl exec -it mysql-instance-6c76bcf945-mvw7b -- mysql -potuspassword -e "select * from test;" otus-database
 mysql: [Warning] Using a password on the command line interface can be insecure.
 
-+----+-------------+
+<code>+----+-------------+
 
 | id | name        |
 
@@ -169,7 +168,7 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 
 |  2 | some data-2 |
 
-+----+-------------+
++----+-------------+</code></p>
 
 
 
@@ -186,7 +185,7 @@ restore-mysql-instance-job   0/1           7m17s      7m17s
 
 Основное ДЗ
 
-В процессе сделано:
+### В процессе сделано:
 1. Установка tiller в namespace cert-manager. 
 Попытка установки helm-chart cert-manager с ошибкой:
 Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is forbidden: User "system:serviceaccount:cert-manager:tiller-cert-manager" cannot create resource "clusterroles" in API group "rbac.authorization.k8s.io" at the cluster scope
@@ -198,7 +197,7 @@ Error: release cert-manager failed: clusterroles.rbac.authorization.k8s.io is fo
 5. Шаблонизация сервисов service и deployment с использованием Kubecfg
 6. Параметризация микросервиса Card при помощи Kustomize для запуска в разных Namespace с префиксами и лейблами.
 
-Как запустить проект:
+### Как запустить проект:
 1. cert-manager
 - kubectl apply -f 1-cert-manager-namespase.yaml	
 - kubectl apply -f 2-cert-manager-service.yaml	
@@ -229,7 +228,7 @@ kubectl apply -k kustomize/overrides/socks-shop
 kubectl create ns socks-shop-prod
 kubectl apply -k kustomize/overrides/socks-shop-prod
 
-Как проверить работоспособность:
+### Как проверить работоспособность:
 1. cert-manager
 kubectl get all -n cert-manager
 
@@ -255,10 +254,10 @@ kubectl get all -n socks-shop-prod
 Основное ДЗ
 
 ### В процессе сделано:
+1. Установлен Consul и Vault в режиме high availability.
+
+### Как запустить проект:
 1. 
 
-Как запустить проект:
-1. 
-
-Как проверить работоспособность:
+### Как проверить работоспособность:
 1. 
