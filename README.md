@@ -250,6 +250,10 @@ kubectl get all -n socks-shop-prod
 
 ### В процессе сделано:
 1. Установлен Consul и Vault в режиме high availability.
+2. Созданы секреты и политики
+3. Настроена авторизация в vault через kubernetes sa
+4. Запущен под с nginx, в который прокинуты секреты из vault через consul-template
+5. Запущен CA на базе vault
 
 helm status vault:
 <pre><code>LAST DEPLOYED: Sat Dec 21 15:41:41 2019
@@ -679,13 +683,3 @@ GpXH7QI76oYv/PcmfT7Z6rDRJ+uJyP/gOXlrml3CAggkSmp+1EmXzUqhu4kiHqSY
 private_key_type    rsa
 serial_number       22:69:ca:c4:1d:de:ae:45:57:31:03:19:f1:dc:69:e9:0d:51:8c:fa</code></pre>
 
-
-
-
-### Как запустить проект:
-1. 
-<pre><code>
-</code></pre>
-
-### Как проверить работоспособность:
-1. 
