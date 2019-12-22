@@ -544,6 +544,144 @@ metadata:
   &lt;/html&gt;
   </code></pre>
 
+
+### CA на базе vault
+
+Включить pki секреты
+<pre><code>kubectl exec -it vault-0 -- vault secrets enable pki
+kubectl exec -it vault-0 -- vault secrets tune -max-lease-ttl=87600h pki
+kubectl exec -it vault-0 -- vault write -field=certificate pki/root/generate/internal common_name="exmaple.ru" ttl=87600h > CA_cert.crt</code></pre>
+
+URL для CA и отозванных сертификатов
+<pre><code>kubectl exec -it vault-0 -- vault write pki/config/urls issuing_certificates="http://vault:8200/v1/pki/ca" crl_distribution_points="http://vault:8200/v1/pki/crl"</code></pre>
+
+Создадим промежуточный сертификат
+<pre><code>kubectl exec -it vault-0 -- vault secrets enable --path=pki_int pki
+kubectl exec -it vault-0 -- vault secrets tune -max-lease-ttl=87600h pki_int
+kubectl exec -it vault-0 -- vault write -format=json
+pki_int/intermediate/generate/internal \
+common_name="example.ru Intermediate Authority" | jq -r '.data.csr' >
+pki_intermediate.csr</code></pre>
+
+Пропишем промежуточный сертификат в vault
+<pre><code>kubectl cp pki_intermediate.csr vault-0:/tmp
+kubectl exec -it vault-0 -- vault write -format=json pki/root/sign-intermediate \
+csr=@/tmp/pki_intermediate.csr \
+format=pem_bundle ttl="43800h" | jq -r '.data.certificate' > intermediate.cert.pem
+kubectl cp intermediate.cert.pem vault-0:/tmp
+kubectl exec -it vault-0 -- vault write pki_int/intermediate/set-signed certificate=@/tmp/intermediate.cert.pem</code></pre>
+
+Создадим роль для выдачи сертификатов
+<pre><code>kubectl exec -it vault-0 -- vault write pki_int/roles/example-dot-ru \
+allowed_domains="example.ru" allow_subdomains=true max_ttl="720h"</code></pre>
+
+Создадим и отзовем сертификат
+<pre><code>kubectl exec -it vault-0 -- vault write pki_int/issue/example-dot-ru common_name="gitlab.example.ru" ttl="24h"
+kubectl exec -it vault-0 -- vault write pki_int/revoke serial_number="22:69:ca:c4:1d:de:ae:45:57:31:03:19:f1:dc:69:e9:0d:51:8c:fa"
+</code></pre>
+
+Выдача при создании сертификата:
+<pre><code>Key                 Value
+---                 -----
+ca_chain            [-----BEGIN CERTIFICATE-----
+MIIDnDCCAoSgAwIBAgIUH5mwnTKCrFjBE7rykjDxaVjkG/owDQYJKoZIhvcNAQEL
+BQAwFTETMBEGA1UEAxMKZXhtYXBsZS5ydTAeFw0xOTEyMjIxMTQyMDhaFw0yNDEy
+MjAxMTQyMzhaMCwxKjAoBgNVBAMTIWV4YW1wbGUucnUgSW50ZXJtZWRpYXRlIEF1
+dGhvcml0eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALHAP27OZevI
+zt2fSy5W3vpVufbJu6+3daBsXoUxOaMWmkVm6ob1qoUxpm/WQLT+xhmndt7pv4pD
+ACqUEKzHL2JTlXemvKAXBmXNYJWH60fcG6DgjtEh7ny/Og0pdXlKgEf4ItbQtMC5
+dKz0G3YNaxj0OWdZWTGN1qDWQT3sECHtBv4YudPDwMCCJDeDR909AZSmDLay3C9s
+OasXCO/R4PsST7JMkl4gjXktm20kaqMt95N/uYfh7Lkwcu95XrtA7F6EHWuiuCqT
+EymTBaiUuskzsuNzh0KRe0THFlCNDL7W76SLAL+c8nmCszH7ylmOf/tnbKEJd5aQ
+dBIPXBS9/RcCAwEAAaOBzDCByTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUw
+AwEB/zAdBgNVHQ4EFgQUHmUVD8OeN5rjt4jyJhDBQgWyOjQwHwYDVR0jBBgwFoAU
+TcOGNriRV5TqXnYybrgQbAk0JcYwNwYIKwYBBQUHAQEEKzApMCcGCCsGAQUFBzAC
+hhtodHRwOi8vdmF1bHQ6ODIwMC92MS9wa2kvY2EwLQYDVR0fBCYwJDAioCCgHoYc
+aHR0cDovL3ZhdWx0OjgyMDAvdjEvcGtpL2NybDANBgkqhkiG9w0BAQsFAAOCAQEA
+nwVjpLZG+JMmlY4Kb9yQb8m1Gq8whiH8qu7AZ142rduAYtILtJ9bFRBl6bXBI/lX
+WCUi+u8hG4UVDr76j6H22W9I+YHIsRWIunm+/SCLxWbXDPbtrIy8OX7XmfCAV5YO
+nvLimMKwZbzzdTZvPhkGXCpGY+D8xLByJH5alFzlak7bJx8CXISijMjNP+1RM8xn
+ERgch+c6IRYwHTFyNlruikrdHwVB/Of0TnlQlVFAQ5q1lciks4JQLbkCO/Yhnw31
+d+mKPW6lFDd+gHa4WPmwfIRL8irw0vb3ugHjDtQd+h7toBTY4xCOpEf/b7ni2o5m
+bRLD83Wl1JZBcktW1mSU4A==
+-----END CERTIFICATE-----]
+certificate         -----BEGIN CERTIFICATE-----
+MIIDZzCCAk+gAwIBAgIUImnKxB3erkVXMQMZ8dxp6Q1RjPowDQYJKoZIhvcNAQEL
+BQAwLDEqMCgGA1UEAxMhZXhhbXBsZS5ydSBJbnRlcm1lZGlhdGUgQXV0aG9yaXR5
+MB4XDTE5MTIyMjExNTYyMloXDTE5MTIyMzExNTY1MlowHDEaMBgGA1UEAxMRZ2l0
+bGFiLmV4YW1wbGUucnUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDH
+ShdQ1h8jj4CEpzvqGNPLfNqOck4mMg2YWojTqtG8ZgUj/AA3Q+LUId7OP5U1JzOq
+y8FdtalQUgsdio4kCZcmhDpjvuWP1oGf3RiIoiNrMl5t4Hp0icSjfF4F7k0mTYyz
+Ca7Kq4pC1laPzTC5abNhX6G9IVTNY4Nt10b8mgnjQ9Ycr1/EJakUbnKo7V3Oi1sw
+UfYnRURtdwfTCCcNUI3laTS+t6tQvcgkKkDYra11ex3/k8JlQaWzWtPn7aCV9OSQ
+FNCnX7oX2ZxqlQvTjCVuhMWwgt1LS6m/RQ5ST/tLUen/f85Qgj+ciIk1t7oTmjG7
+86ujGU9UgV9qtu4n24orAgMBAAGjgZAwgY0wDgYDVR0PAQH/BAQDAgOoMB0GA1Ud
+JQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUFVgm+9Cj7CoGwWwh
+yIOqTTQL/L4wHwYDVR0jBBgwFoAUHmUVD8OeN5rjt4jyJhDBQgWyOjQwHAYDVR0R
+BBUwE4IRZ2l0bGFiLmV4YW1wbGUucnUwDQYJKoZIhvcNAQELBQADggEBAEe1Lep0
+QNU180Kjjei8eMfsdIqAd0/YIUNXtDxlkyNPkABCyAzWr7jthh294lG6jIvLoSsg
+yIXBcWjIuZr6LBt+GtThoTWUnscc9S3BKf/R0aFSFtUVAP5wC9lW8XP1E9IuPTfF
+y7XRj6vDuHhffD2laj5EIK2niN71sgbgjAx3TLupBiYvsh/PrVUzzCO3LMGiDag3
+MBpGMN0jYMDtexMqdL3BQ802iLC2D3ibLx5MfgHM7G+qOeZ5hE3cp+rxqYL2fRZA
+f+nG62FcLxG/Pz3mFSBW9AGc8nBuTZJDIdv7bii2PaYmdHI+A5Fp28z6IPDLT84G
+uubR7nR5/2NY6B8=
+-----END CERTIFICATE-----
+expiration          1577102212
+issuing_ca          -----BEGIN CERTIFICATE-----
+MIIDnDCCAoSgAwIBAgIUH5mwnTKCrFjBE7rykjDxaVjkG/owDQYJKoZIhvcNAQEL
+BQAwFTETMBEGA1UEAxMKZXhtYXBsZS5ydTAeFw0xOTEyMjIxMTQyMDhaFw0yNDEy
+MjAxMTQyMzhaMCwxKjAoBgNVBAMTIWV4YW1wbGUucnUgSW50ZXJtZWRpYXRlIEF1
+dGhvcml0eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALHAP27OZevI
+zt2fSy5W3vpVufbJu6+3daBsXoUxOaMWmkVm6ob1qoUxpm/WQLT+xhmndt7pv4pD
+ACqUEKzHL2JTlXemvKAXBmXNYJWH60fcG6DgjtEh7ny/Og0pdXlKgEf4ItbQtMC5
+dKz0G3YNaxj0OWdZWTGN1qDWQT3sECHtBv4YudPDwMCCJDeDR909AZSmDLay3C9s
+OasXCO/R4PsST7JMkl4gjXktm20kaqMt95N/uYfh7Lkwcu95XrtA7F6EHWuiuCqT
+EymTBaiUuskzsuNzh0KRe0THFlCNDL7W76SLAL+c8nmCszH7ylmOf/tnbKEJd5aQ
+dBIPXBS9/RcCAwEAAaOBzDCByTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUw
+AwEB/zAdBgNVHQ4EFgQUHmUVD8OeN5rjt4jyJhDBQgWyOjQwHwYDVR0jBBgwFoAU
+TcOGNriRV5TqXnYybrgQbAk0JcYwNwYIKwYBBQUHAQEEKzApMCcGCCsGAQUFBzAC
+hhtodHRwOi8vdmF1bHQ6ODIwMC92MS9wa2kvY2EwLQYDVR0fBCYwJDAioCCgHoYc
+aHR0cDovL3ZhdWx0OjgyMDAvdjEvcGtpL2NybDANBgkqhkiG9w0BAQsFAAOCAQEA
+nwVjpLZG+JMmlY4Kb9yQb8m1Gq8whiH8qu7AZ142rduAYtILtJ9bFRBl6bXBI/lX
+WCUi+u8hG4UVDr76j6H22W9I+YHIsRWIunm+/SCLxWbXDPbtrIy8OX7XmfCAV5YO
+nvLimMKwZbzzdTZvPhkGXCpGY+D8xLByJH5alFzlak7bJx8CXISijMjNP+1RM8xn
+ERgch+c6IRYwHTFyNlruikrdHwVB/Of0TnlQlVFAQ5q1lciks4JQLbkCO/Yhnw31
+d+mKPW6lFDd+gHa4WPmwfIRL8irw0vb3ugHjDtQd+h7toBTY4xCOpEf/b7ni2o5m
+bRLD83Wl1JZBcktW1mSU4A==
+-----END CERTIFICATE-----
+private_key         -----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAx0oXUNYfI4+AhKc76hjTy3zajnJOJjINmFqI06rRvGYFI/wA
+N0Pi1CHezj+VNSczqsvBXbWpUFILHYqOJAmXJoQ6Y77lj9aBn90YiKIjazJebeB6
+dInEo3xeBe5NJk2MswmuyquKQtZWj80wuWmzYV+hvSFUzWODbddG/JoJ40PWHK9f
+xCWpFG5yqO1dzotbMFH2J0VEbXcH0wgnDVCN5Wk0vrerUL3IJCpA2K2tdXsd/5PC
+ZUGls1rT5+2glfTkkBTQp1+6F9mcapUL04wlboTFsILdS0upv0UOUk/7S1Hp/3/O
+UII/nIiJNbe6E5oxu/OroxlPVIFfarbuJ9uKKwIDAQABAoIBAEMlOn/Y9PrlQbbw
+Jaa1IL8B3R17c8s4uA3qCwnOFwZ0FS1Pnb8BF27Dzq8NCzeycp0MM6VgLKDMU8Rr
+R4Lq3Et057ttuSjibCAxvS9j+a0Hdnts07VqKZ+vqnozFTlfjZVRINxWOapVTyr6
+Rn1iGLcpInR3w3vEGKcsjlVTjRtNyqJfEPq01VOwwWa9H4U8hLYmZHMGH3wMDZHG
+2LGSU+hB5afxYmqBpwLOeNgFvYGVzRKoWGPidX2bmZBwpblp2TnvZNjoqSdh1EF8
+TCPeQz+yDRDmZRYmxxnv0ygCSXKvIMuqJYEgJKjZMyYCiKmM4wkEEnGf3hxadB4u
+Pfh/aZECgYEA5EYOgdYylRdx6X7Jaycv5kHjl6X443kzgTQLqA3wLOb4gToiFjC9
+YT74xGg/neqg9B4ZKnDgqT7BAjjNG5mZARaciMtaV+tr1CszrgSmtLLipb6r5qIB
+H1++OjkPgmn4iyMVSIiD2iyL+Yk4Lprc9fv7AhrG0jw4CFO0GCE8pokCgYEA337M
+U9n21YPykG2ZE2bWhjW1Ng++ROU+ZPGBWqtzGNzj8YLbO7FQ4RZbQx1C/uPdae43
+KghDhbNeM9ABFkzb2ifa0WFRuiVYZWVvm5m/BH6ujlQjHGdq31LGRJ4Bg2JtKr/0
+TMWfAYXyVexcIULPhXyfVtacV+xILOSk2x5WPhMCgYEAjqlx25cAWckjOegw/TSq
+bN703AuwNonCtJbQSiEb3xQibrDkKLYhRStT0XvNdmXyXV6KH8oXve4oNblGBl/C
+DboR7jQYrCXHZ/vv+muRvBCoMSmuyR6qUO9HNZ//n2OXH223mXMn5Cw+9p7Za9cB
+DQKD5tbRNwbHhfy56vKqsvECgYASCx+d6Wv3IvbzWBXSrivFnBJsMesvjr5x0dma
+o1rgd/zjI6hlclRQR8jIa1VcVLMseTH078PbyHZjgniD/2KEg1E0NEIv4BH55a2U
+B16Xk06uaPaItYS4UOt24LbIj6q2l9a2WAIVUmYVL8bkXIt6gGwwy5TFuGq/TRpO
+Im3eBwKBgQCjjIp508rsEOz5whFbsr6lJlEiehH1kICCvncsxqbijo8+Bs08LfWJ
+GpXH7QI76oYv/PcmfT7Z6rDRJ+uJyP/gOXlrml3CAggkSmp+1EmXzUqhu4kiHqSY
+9hRhF0LtL93SVYTW+BBmOzFRYLYVmOPsfpdQkJF0LDB90cZfQy77+w==
+-----END RSA PRIVATE KEY-----
+private_key_type    rsa
+serial_number       22:69:ca:c4:1d:de:ae:45:57:31:03:19:f1:dc:69:e9:0d:51:8c:fa</code></pre>
+
+
+
+
 ### Как запустить проект:
 1. 
 <pre><code>
